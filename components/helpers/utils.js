@@ -5,7 +5,9 @@ export function getServiceClientName(asyncapi) {
   
 // Function to generate service client description
 export function getServiceClientDescription(asyncapi) {
-    return `${asyncapi.info().description()}`;
+    const hasDesc = asyncapi.info().hasDescription();
+    const description = hasDesc ? `${asyncapi.info().description()}` : '';
+    return description;
   };
   
 // Function to import client service
