@@ -27,14 +27,16 @@ describe('Service Client Helpers', () => {
 
     const mockOperations = [
         { 
+            hasOperationId: jest.fn(() => true),
             operationId: jest.fn(() => 'sendTestOperation'), 
-            id: jest.fn(() => 'receiveTestOperation'),
+            id: jest.fn(() => 'sendTestOperation'),
             channels: jest.fn(() => [{ address: jest.fn(() => 'test/topic') }]), 
             summary: jest.fn(() => 'Test Operation Summary'),
             isSend: jest.fn(() => true),
             isReceive: jest.fn(() => false),
         },
         {
+            hasOperationId: jest.fn(() => true),
             operationId: jest.fn(() => 'receiveTestOperation'),
             id: jest.fn(() => 'receiveTestOperation'),
             channels: jest.fn(() => [{ address: jest.fn(() => 'test/topic') }]),
@@ -76,6 +78,12 @@ describe('Service Client Helpers', () => {
 
     describe('getFunctionName', () => {
         it('should return the correct function name for a given operation', () => {
+            const result = getFunctionName(mockOperations[0]);
+            expect(result).toEqual('sendTestOperation');
+        });
+
+        it('should return the correct function name using convertChannelToFilename if operationId is not available', () => {
+            mockOperations[0].hasOperationId.mockReturnValue(false);
             const result = getFunctionName(mockOperations[0]);
             expect(result).toEqual('sendTestOperation');
         });
